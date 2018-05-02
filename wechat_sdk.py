@@ -33,7 +33,11 @@ class WeChatEnterprise(object):
             url = "%s/gettoken?corpid=%s&corpsecret=%s" % (self.url_prefix, self.corpid, self.corpsecret)
             res = requests.get(url)
             access_token = res.json().get("access_token")
-            tmp = {"token":access_token,"time":int(time.time())+7200}
+            tmp = {"token":access_token,"time":time.time()+7200}
+            # 销毁以前的token数据
+            Token_cache.seek(0)
+            Token_cache.truncate()
+            # 重新写新的token数据
             Token_cache.write(json.dumps(tmp))
         return access_token
 
